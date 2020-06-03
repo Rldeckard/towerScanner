@@ -1,9 +1,10 @@
-<?php
+$password<?php
 
 // Set up some variables that may change over time, put this at the top of the script for easy access
 
 // SNMP Community String
-#$community = '!highspeed';
+#$community = '';
+#$password = '';
 #$timeout = 50000;
 include('connectdb.php');
 $empty_column = "0000";
@@ -27,12 +28,12 @@ $empty_column = "0000";
 	return $results;
 }*/
 
-function deleteDevice($IP_Address, $Device_Name, $Tower_Number) { 
+function deleteDevice($IP_Address, $Device_Name, $Tower_Number) {
 	$IP_Address = escapeshellarg($IP_Address);
 	global $conn;
 	if (!mysqli_query($conn, "DELETE FROM TowerScan.Towers WHERE IP_Address = $IP_Address; "))
-	{ 
-        	return "Error: Device not removed!"; 
+	{
+        	return "Error: Device not removed!";
 	} else {
 		return "SUCCESS";
 		ChangeTable($IP_Address, "Device Removed: ", $Device_Name, $Tower_Number);
@@ -42,8 +43,8 @@ function deleteDevice($IP_Address, $Device_Name, $Tower_Number) {
 function AFgetCWandSSID($IP_Address) {//gets the cw  and SSID as snmp can't do it
         $cmd = 'cat /tmp/system.cfg | grep radio.1.linkname= && cat /tmp/system.cfg | grep radio.1.txchanbw= ';//list of commands, don't forget the "&&"
         $connection = ssh2_connect($IP_Address);//set ssh target
-        $auth = ssh2_auth_password($connection,'admin','#This415');
-        if ($auth == FALSE) { $auth = ssh2_auth_password($connection, 'admin', '#This4153'); }
+        $auth = ssh2_auth_password($connection,'admin',$password);
+        if ($auth == FALSE) { $auth = ssh2_auth_password($connection, 'admin', $password2); }
         $stream = ssh2_exec($connection, $cmd);
         stream_set_blocking($stream, true);//necessary to get ouput from ssh2_exec
         $stream_out = ssh2_fetch_stream( $stream, SSH2_STREAM_STDIO );//this gets the ouput of our ssh command
@@ -55,7 +56,7 @@ function AFgetCWandSSID($IP_Address) {//gets the cw  and SSID as snmp can't do i
         {
  	       $results[] = trim(strstr($output, '='), '=');
         }
-	switch($results[1]) //Converts UBNT cw to actuall cw. 
+	switch($results[1]) //Converts UBNT cw to actuall cw.
 	{
         	case "16": $Channel_Width = "10"; break;
 		case "64": $Channel_Width = "20"; break;
@@ -64,29 +65,29 @@ function AFgetCWandSSID($IP_Address) {//gets the cw  and SSID as snmp can't do i
         	case "2048": $Channel_Width = "100"; break;
 	        default: $Channel_Width = "0000"; break;
 	}
-	
+
  	return array($results[0], $Channel_Width);//puts our variables into an array for transport out of function
 }
 
 function ChangeTable($IP_Address, $Prev_Entry, $New_Entry){
 	global $conn;
 	global $TowerNumber;
-	if (!mysqli_query($conn, "INSERT INTO TowerScan.ChangeLog (IP_Address, Prev_Entry, New_Entry, Tower_Number) 
+	if (!mysqli_query($conn, "INSERT INTO TowerScan.ChangeLog (IP_Address, Prev_Entry, New_Entry, Tower_Number)
 		VALUES ($IP_Address, $Prev_Entry, $New_Entry, $TowerNumber)")) {
-		
+
 		return mysqli_error($conn);
         } else {
-        	return "SUCCESS";        
+        	return "SUCCESS";
         }
 
 
 }
 
-function UBNTgetStats($IP_Address) { 
+function UBNTgetStats($IP_Address) {
 	$cmd = 'cat /tmp/system.cfg | grep radio.1.freq= && cat /tmp/system.cfg | grep radio.1.clksel= && cat /tmp/system.cfg | grep radio.1.chanbw=';
 	$connection = ssh2_connect($IP_Address);//set ssh target
-        $auth = ssh2_auth_password($connection,'admin','#This4153');
-        if ($auth == FALSE) { $auth = ssh2_auth_password($connection, 'admin', '#This4153'); }
+        $auth = ssh2_auth_password($connection,'admin',$password);
+        if ($auth == FALSE) { $auth = ssh2_auth_password($connection, 'admin', $password); }
         $stream = ssh2_exec($connection, $cmd);
         stream_set_blocking($stream, true);//necessary to get ouput from ssh2_exec
         $stream_out = ssh2_fetch_stream( $stream, SSH2_STREAM_STDIO );//this gets the ouput of our ssh command
@@ -103,7 +104,7 @@ function UBNTgetStats($IP_Address) {
 		case "20": $ChannelWidth = "10"; break;
 		case "10": $ChannelWidth = "20"; break;
 		case "130": $ChannelWidth = "30"; break;
-#		case "": $ChannelWidth = 40; break; //same as 20mhz -_-		
+#		case "": $ChannelWidth = 40; break; //same as 20mhz -_-
         }
 	return array($results[0], $ChannelWidth);
 }
@@ -112,8 +113,8 @@ function UBNTsmStats($IP_Address) {
 
 	$cmd = 'cat /tmp/system.cfg | grep radio.1.clksel= && cat /tmp/system.cfg | grep radio.1.chanbw=';
         $connection = ssh2_connect($IP_Address);//set ssh target
-        $auth = ssh2_auth_password($connection,'admin','#This4153');
-	if ($auth === FALSE) { ssh2_auth_password($connection, 'admin', '!highspeed'); }
+        $auth = ssh2_auth_password($connection,'admin',$password);
+	if ($auth === FALSE) { ssh2_auth_password($connection, 'admin', $password); }
         $stream = ssh2_exec($connection, $cmd);
         stream_set_blocking($stream, true);//necessary to get ouput from ssh2_exec
         $stream_out = ssh2_fetch_stream( $stream, SSH2_STREAM_STDIO );//this gets the ouput of our ssh command
@@ -152,13 +153,13 @@ function UBNTsmStats($IP_Address) {
 	$newIP = '10.'.$octet2.'.'.$octet3.'.'.$octet;
 	$query = mysqli_query($conn, "SELECT Frequency, Channel_Width, ColorCode_SSID FROM TowerScan.Towers WHERE IP_Address = $newIP; ");
 	$rows = mysqli_fetch_rows($query);
-	if ($rows == 1) { 
+	if ($rows == 1) {
 		$results = mysqli_fetch_assoc($query);
 		$Frequency = $results["Frequency"];
 		$Channel_Width = $results["Channel_Width"];
 		$SSID = $results["ColorCode_SSID"];
 	}
-	
+
         return array($Frequency, $Channel_Width, $SSID); */
 }
 function UnknownTable($IP_Address, $upCheck){
@@ -173,15 +174,15 @@ function UnknownTable($IP_Address, $upCheck){
 }//closes function UnknownTable
 
 function UpdateTableUnknown($IP_Address){
-        
+
         global $conn;
         $IP_Address = escapeshellarg($IP_Address);
         $upCheck = exec('nmap -nsP '.$IP_Address.' ');
         if (strpos($upCheck, '1 host up') !== FALSE){
           $upCheck = "CONNECTED";
         }
-        else { 
-          $upCheck = "DISCONNECTED"; 
+        else {
+          $upCheck = "DISCONNECTED";
         }
         $query = mysqli_query($conn, "SELECT * FROM TowerScan.Unknown WHERE IP_Address = $IP_Address; ");
         $fetch = mysqli_num_rows($query);
@@ -191,13 +192,13 @@ function UpdateTableUnknown($IP_Address){
         if ($tfetch > 0)
         {
 		$upCheck = escapeshellarg($upCheck);
-	        if ($upCheck !== "CONNECTED") { 
+	        if ($upCheck !== "CONNECTED") {
 	            mysqli_query($conn, "UPDATE TowerScan.Towers SET UP_Check = 'DISCONNECTED' WHERE IP_Address = $IP_Address; ");
-	            mysqli_query($conn, "UPDATE TowerScan.Towers SET Down_Count = Down_Count + 1 WHERE IP_Address = $IP_Address; "); 
+	            mysqli_query($conn, "UPDATE TowerScan.Towers SET Down_Count = Down_Count + 1 WHERE IP_Address = $IP_Address; ");
                 }
-                
+
         	if ($fetch > 0){ mysqli_query($conn, "DELETE FROM TowerScan.Unknown WHERE IP_Address = $IP_Address; "); }
-        } 
+        }
         elseif ($fetch > 0)
         { //if statement if there's an entry for an IP already. Used to update current entries
         	while ($results = mysqli_fetch_assoc($query))
@@ -214,10 +215,10 @@ function UpdateTableUnknown($IP_Address){
         }
 }//closes function UpdateTableTowers
 
-         
-         
-         
-function TowersTable($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device_Make, $Device_Type, $Frequency, $Channel_Width, $ColorCode_SSID, $Tower_Number, $SNMP_Community, $SNMP_Version){ //puts new devices into database 
+
+
+
+function TowersTable($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device_Make, $Device_Type, $Frequency, $Channel_Width, $ColorCode_SSID, $Tower_Number, $SNMP_Community, $SNMP_Version){ //puts new devices into database
 
 	global $conn;
 	$INF_Type = escapeshellarg($INF_Type);
@@ -231,16 +232,16 @@ function TowersTable($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device
 	$MAC_Address = escapeshellarg($MAC_Address);
 	$SNMP_Community = escapeshellarg($SNMP_Community);
 	$SNMP_Version = escapeshellarg($SNMP_Version);
-	if (!mysqli_query($conn, "INSERT INTO TowerScan.Towers 
-		(UP_Check, INF_Type, Device_Name, IP_Address, MAC_Address, Device_Make, Device_Type, Frequency, Channel_Width, ColorCode_SSID, Tower_Number, Down_Count, SNMP_Community, SNMP_Version) 
-		VALUES ('CONNECTED', $INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device_Make, $Device_Type, $Frequency, $Channel_Width, $ColorCode_SSID, $Tower_Number, 0, $SNMP_Community, $SNMP_Version)")){ 
+	if (!mysqli_query($conn, "INSERT INTO TowerScan.Towers
+		(UP_Check, INF_Type, Device_Name, IP_Address, MAC_Address, Device_Make, Device_Type, Frequency, Channel_Width, ColorCode_SSID, Tower_Number, Down_Count, SNMP_Community, SNMP_Version)
+		VALUES ('CONNECTED', $INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device_Make, $Device_Type, $Frequency, $Channel_Width, $ColorCode_SSID, $Tower_Number, 0, $SNMP_Community, $SNMP_Version)")){
 		return mysqli_error($conn);
 #		return $IP_Address;
-	} 
+	}
 	else {
         	ChangeTable($IP_Address, '"New Device Added: "', $Device_Name); //strictly for change log viewability
 	}
-	
+
 }//closes function TowersTable
 
 function UpdateTableTowers($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device_Make, $Device_Type, $Frequency, $Channel_Width, $ColorCode_SSID, $Tower_Number, $SNMP_Community, $SNMP_Version){
@@ -249,26 +250,26 @@ function UpdateTableTowers($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $
         $Frequency = strval($Frequency);
 	global $conn;
 	$IP_Address = escapeshellarg($IP_Address);
-	
+
 	$query = mysqli_query($conn, "SELECT * FROM TowerScan.Towers WHERE IP_Address = $IP_Address; ");
 	$fetch = mysqli_num_rows($query);
 	$unkquery = mysqli_query($conn, "SELECT * FROM TowerScan.Unknown WHERE IP_Address = $IP_Address; ");
 	$unkrow = mysqli_num_rows($unkquery);
-	
+
 	if ($unkrow > 0)
 	{
 	    mysqli_query($conn, "DELETE FROM TowerScan.Unknown WHERE IP_Address = $IP_Address; ");
 	}
-	
+
         if ($fetch > 0)
         { //if statement if there's an entry for an IP already. Used to update current entries
           while ($results = mysqli_fetch_assoc($query))
-          {   
+          {
               if ($results["UP_Check"] !== "CONNECTED")
               {
-                  mysqli_query($conn, "UPDATE TowerScan.Towers SET UP_Check = 'CONNECTED' WHERE IP_Address = $IP_Address; ");	
+                  mysqli_query($conn, "UPDATE TowerScan.Towers SET UP_Check = 'CONNECTED' WHERE IP_Address = $IP_Address; ");
                   mysqli_query($conn, "UPDATE TowerScan.Towers SET Down_Count = 0 WHERE IP_Address = $IP_Address; ");
-              } 
+              }
               if ($results["INF_Type"] !== $INF_Type)
               {
                   $INF_Type = escapeshellarg($INF_Type);
@@ -334,8 +335,8 @@ function UpdateTableTowers($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $
                   mysqli_query($conn, "UPDATE TowerScan.Towers SET MAC_Address = $MAC_Address WHERE IP_Address = $IP_Address;");
               }
               return mysqli_error($conn);
-          }//closes while                      
-        }//closes if fetch                   
+          }//closes while
+        }//closes if fetch
 	else{
 		return TowersTable($INF_Type, $Device_Name, $IP_Address, $MAC_Address, $Device_Make, $Device_Type, $Frequency, $Channel_Width, $ColorCode_SSID, $Tower_Number, $SNMP_Community, $SNMP_Version);
 	}
