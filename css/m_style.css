@@ -1,0 +1,36 @@
+html[xmlns] .clear { display: block;}
+* html .clear { height: 1%;}
+
+#header{}
+#footer{font-size:10px;text-align:right;font-family:arial,sans,serif;}
+#label{font-weight:bold;font-size:16px;}
+
+input[type=submit] {padding:5px 15px;color:#08233e;background-color:rgba(255,204,0,1);border:0 none;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);-webkit-border-radius: 5px;border-radius: 5px;}
+input[type=reset] {padding:5px 15px;color:#08233e;background-color:rgba(255,204,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px; }
+#delete-button {padding:5px 15px;color:#ffffff;background-color:rgba(255,0,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px;}
+#purge-button {padding:5px 15px;color:#ffffff;background-color:rgba(255,174,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px;}
+#result {position:relative;top:0px;height:auto;padding:10px;border:1px solid black;font-family:arial,sans,serif;font-size:12px;}
+div { text-align: center; }
+body {overflow:auto;margin:0px auto;background:#ffffff;color:#000000;height:auto;align:center}
+hr {color:red;}
+h1{font-size:22px;text-weight:bold;font-family:arial,sans,serif;}
+h2{font-size:18px;text-weight:bold;font-family:arial,sans,serif;}
+p{font-family:Arial, Sans, serif;font-size:14px;}
+
+a:link {color:#008ac3;text-decoration:none;}
+a:visited {color:#008ac3;text-decoration:none;}
+a:hover {color:#008ac3;text-decoration:underline;}
+a:active {color:#008ac3;text-decoration:none;}
+
+#menu {color:#008ac3;text-decoration:none;font-weight:bold;font-family:Arial, Helvetica, sans-serif, "Trebuchet MS";}
+#menu:link {color:#008ac3;text-decoration:none;font-weight:bold;}
+#menu:visited {color:#008ac3;text-decoration:none;font-weight:bold;}
+#menu:hover {color:#00678a;text-decoration:underline;font-weight:bold;}
+#menu:active {color:#008ac3;text-decoration:none;font-weight:bold;}
+#export_dropdown, #note_label, #checkbox_label, #checkbox, #search, #search_label, #dropSearch, #change_count, #changes_header, #more, #m_menu, #submenu, .paddingBlock { display: none; opacity: 0; }
+
+.head {font-weight:bold;color:#ffff00;font-size:20px;}
+
+#results { display: block; }
+
+label.header {font-weight:bold;}

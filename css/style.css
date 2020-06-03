@@ -1,0 +1,83 @@
+html[xmlns] .clear { display: block;}
+* html .clear { height: 1%;}
+
+#header{}
+#footer{font-size:10px;text-align:right;font-family:arial,sans,serif;}
+#submenu{position:absolute;top:10px;right:0px;font-family:arial,sans,serif;font-size:12px;background-color:#f1f1f1;}
+#label{font-weight:bold;font-size:16px;}
+
+input[type=submit] {padding: 0;color:#08233e;background-color:rgba(255,204,0,1);border:0 none;cursor:pointer;box-shadow:
+	inset 0 1px 0 rgba(255,255,255,0.5);
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	height: 35px;
+	width: 120px;
+	font-weight: bold;
+	margin-right: 5px;
+	text-align: center;	
+}
+input[type=reset] {padding:5px 15px;color:#08233e;background-color:rgba(255,204,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px; }
+input[type=text] {border-radius: 5px;}
+input[type=number] {border-radius: 5px}
+input[type=checkbox] {border-radius: 5px;webkit-border-radius: 5px; }
+#results { padding-left: 20px; }
+
+.paddingBlock { /* Here down basically defines everything you see on the Recent changes. Don't touch*/
+  padding: 20px 0; /* adds spacing between parts of the recent changes elements */
+  padding-left: 200px; /* Moves the left side of the recent changes off the wall*/
+}
+
+.eqDisplay {
+  display: flex; /* Helps define element locations on webpage */
+}
+
+.equal {
+  padding: 10px;
+}
+
+.eqHW {
+  flex: 1; /* Think this moves us to the next line*/
+}
+
+.eqHWrap {
+  justify-content: space-between; /* Puts spacing below everything and helps move to next line*/
+}
+
+#mobile_view, #m_submenu { display: none;}
+#update-button {padding:5px 15px;color:#08233e;background-color:rgba(0,255,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px;}
+#delete-button {padding:5px 15px;color:#ffffff;background-color:rgba(255,0,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px;}
+#purge-button {padding:5px 15px;color:#ffffff;background-color:rgba(255,174,0,1);border:0 none; cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px;}
+
+#container {position:relative;margin:0px auto 0 auto;height:auto;width:1200;}
+#body {position:absolute;top:150px;left:0px;width:100%;height:auto;padding:10px;border:1px solid gray;margin:0px;font-family:arial,sans,serif;font-size:14px;}
+#result {position:relative;top:0px;left:10px;width:400;height:auto;padding:10px;border:1px solid black;font-family:arial,sans,serif;font-size:12px;}
+
+body {overflow: auto;margin:0px auto;background:#ffffff;color:#000000;height:auto;}
+hr {color:red;}
+h1{font-size:22px;text-weight:bold;font-family:arial,sans,serif;}
+h2{font-size:18px;text-weight:bold;font-family:arial,sans,serif;}
+p{font-family:Arial, Sans, serif;font-size:14px;}
+
+a:link {color:#008ac3;text-decoration:none;}
+a:visited {color:#008ac3;text-decoration:none;}
+a:hover {color:#008ac3;text-decoration:underline;}
+a:active {color:#008ac3;text-decoration:none;}
+
+#menu {color:#008ac3;text-decoration:none;font-weight:bold;font-family:Arial, Helvetica, sans-serif, "Trebuchet MS";}
+#menu:link {color:#008ac3;text-decoration:none;font-weight:bold;}
+#menu:visited {color:#008ac3;text-decoration:none;font-weight:bold;}
+#menu:hover {color:#00678a;text-decoration:underline;font-weight:bold;}
+#menu:active {color:#008ac3;text-decoration:none;font-weight:bold;}
+
+.head {font-weight:bold;color:#ffff00;font-size:20px;}
+
+#result {position:absolute;top:205px;left:500px;font-size:14px;background-color:#FBFBFB;color:#000000;border:1px solid #000000;padding:10px;width:400px;text-align:left;}
+#subrate {text-align:center;font-size:30px;font-weight:bold;border:1px solid #000000;padding:5px;}
+
+#changelog {font-size:12px;border:1px solid black;border-collapse:collapse;width:1000px;}
+#changelog th {font-weight:bold;border:1px solid #000000;background-color:#000000;color:#ffffff;width:200px}
+#changelog td {color:#000000;border:1px solid black;text-align:center;height:30px}
+#changelog td.error {background-color:#990000;color:#ffffff;border:1px solid black;text-align:center;}
+#changelog tr {}
+
+label.header {font-weight:bold;}
